@@ -1,5 +1,10 @@
 #!/bin/bash
 
+RED='\033[0;31m'
+NC='\033[0m'
+
+echo "${RED}Starting Master!${NC}"
+
 sysctl net.bridge.bridge-nf-call-iptables=1
 kubeadm init --apiserver-advertise-address $1
 mkdir -p $HOME/.kube
