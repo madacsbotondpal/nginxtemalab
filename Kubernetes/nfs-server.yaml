@@ -1,0 +1,43 @@
+# Note - an NFS server isn't really a K8s concept,
+# it is just easier and more convenient to illustrate
+# this way.
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: nfs-service
+spec:
+  selector:
+    role: nfs
+  ports:
+    # Open the ports required by the NFS server
+    # 2049 for TCP
+    - name: tcp-2049
+      port: 2049
+      protocol: TCP
+
+    # 111 for UDP
+    - name: udp-111
+      port: 111
+      protocol: UDP
+
+---
+
+# We are using cpuguy83's nfs-server image to run in a Kubernetes pod
+# and expose that pod via a service.
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nfs-server-pod
+  labels:
+    role: nfs
+spec:
+  containers:
+    - name: nfs-server-container
+      image: cpuguy83/nfs-server
+      securityContext:
+        privileged: true
+      args:
+        # Pass the paths to share to the Docker image
+        - /exports

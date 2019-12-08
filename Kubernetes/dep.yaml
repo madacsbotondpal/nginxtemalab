@@ -1,22 +1,22 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mynginx
+  name: nginxserver
 spec:
   selector:
     matchLabels:
       app: nginx
-  replicas: 2 
+  replicas: 5 
   template:
     metadata:
       labels:
         app: nginx
     spec:
       volumes:
-        - name: task-pv-storage
-          persistentVolumeClaim:
-            claimName: task-pv-claim
+        - name: nfs-volume
+          nfs:
+           server: 10.0.2.15
+           path: /mnt/sharedfolder
       containers:
         - name: nginx
           image: madacsbotondpal/nginx:latest
@@ -25,4 +25,4 @@ spec:
           - containerPort: 80
           volumeMounts:
             - mountPath: "/var/index"
-              name: task-pv-storage
+              name: nfs-volume

@@ -15,4 +15,4 @@ EOF
 apt update
 apt install -y kubelet kubeadm kubectl
 
-echo "${RED}Kubernetes install completed!{NC}"
+echo "${RED}Kubernetes install completed!${NC}"
